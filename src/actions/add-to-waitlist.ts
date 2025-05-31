@@ -8,7 +8,15 @@ export async function addToWaitlist(formData: FormData) {
     return { error: "Invalid email address." };
   }
   const supabase = await createClient();
-  const { error } = await supabase.from("waitlist").upsert({ email });
+  const { data: existingEntry } = await supabase
+    .from("waitlist")
+    .select("id,email")
+    .eq("email", email)
+    .single();
+
+  const { error } = await supabase
+    .from("waitlist")
+    .upsert({ id: existingEntry?.id, email });
   if (error) {
     return { error: error.message };
   }

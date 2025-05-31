@@ -18,7 +18,7 @@ export async function addToWaitlist(formData: FormData) {
     .from("waitlist")
     .upsert({ id: existingEntry?.id, email });
   if (error) {
-    return { error: error.message };
+    return { error: "Something went wrong. Please try again later." };
   }
   return { success: true };
 }
